@@ -48,7 +48,7 @@ async function task_1_2(db) {
         OrderID as "Order Id",
         SUM(UnitPrice * Quantity) AS "Order Total Price",
         ROUND(SUM(Discount * Quantity)/SUM(UnitPrice * Quantity) * 100,3) as "Total Order Discount, %"
-    FROM orderdetails
+    FROM Orderdetails
     GROUP by OrderID
     ORDER BY OrderID DESC
     `);
@@ -89,7 +89,7 @@ async function task_1_4(db) {
         CustomerID AS "Customer Id",
         COUNT (OrderID) AS "Total number of Orders",
         ROUND(COUNT(*) / SUM(COUNT(*)) OVER() * 100, 5) AS "% of all orders"
-    FROM orders
+    FROM Orders
     GROUP BY CustomerID
     ORDER BY 3 DESC, CustomerID ASC
     `);
@@ -109,7 +109,7 @@ async function task_1_5(db) {
         ProductID AS "ProductId",
         ProductName,
         QuantityPerUnit
-    FROM products
+    FROM Products
     WHERE ProductName BETWEEN "A" AND "G"
     ORDER BY ProductName
     `);
@@ -131,9 +131,9 @@ async function task_1_6(db) {
         ProductName,
         CategoryName,
         CompanyName AS "SupplierCompanyName"
-    FROM products 
-    INNER JOIN categories ON products.CategoryID = categories.CategoryID
-    INNER JOIN suppliers ON products.SupplierID = suppliers.SupplierID
+    FROM Products 
+    INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+    INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
     ORDER BY ProductName, SupplierCompanyName
     `);
     return result[0];
@@ -175,7 +175,7 @@ async function task_1_8(db) {
     SELECT 
         CategoryName,
         COUNT(ProductID) AS "TotalNumberOfProducts"
-    FROM categories
+    FROM Categories
     INNER JOIN products ON products.CategoryID = categories.CategoryID
     GROUP BY CategoryName
     ORDER BY CategoryName
@@ -196,7 +196,7 @@ async function task_1_9(db) {
     SELECT
         CustomerID,
         ContactName
-    FROM customers
+    FROM Customers
     WHERE ContactName LIKE "F__n%"
     `);
     return result[0];
@@ -214,7 +214,7 @@ async function task_1_10(db) {
     SELECT
         ProductID,
         ProductName
-    FROM products
+    FROM Products
     WHERE Discontinued <> 0
     `);
     return result[0];
@@ -234,7 +234,7 @@ async function task_1_11(db) {
     SELECT
         ProductName,
         UnitPrice
-    FROM products
+    FROM Products
     WHERE UnitPrice BETWEEN "5" AND "15"
     ORDER BY UnitPrice, ProductName
     `);
@@ -256,7 +256,7 @@ async function task_1_12(db) {
         SELECT
             ProductName,
             UnitPrice
-        FROM products
+        FROM Products
         ORDER BY UnitPrice DESC, ProductName 
         LIMIT 20) as Products 
     ORDER BY UnitPrice, ProductName;
@@ -276,7 +276,7 @@ async function task_1_13(db) {
     SELECT
         COUNT(ProductID) AS "TotalOfCurrentProducts",
         SUM(Discontinued) AS "TotalOfDiscontinuedProducts"
-    FROM products
+    FROM Products
     `);
     return result[0];
 }
@@ -294,7 +294,7 @@ async function task_1_14(db) {
         ProductName,
         UnitsOnOrder,
         UnitsInStock
-    FROM products
+    FROM Products
     WHERE UnitsOnOrder > UnitsInStock
     `);
     return result[0];
@@ -322,7 +322,7 @@ async function task_1_15(db) {
         SUM(MONTH(OrderDate) = 10) AS "October",
         SUM(MONTH(OrderDate) = 11) AS "November",
         SUM(MONTH(OrderDate) = 12) AS "December"
-    FROM orders
+    FROM Orders
     WHERE YEAR(OrderDate) = 1997
     `);
     return result[0];
@@ -341,7 +341,7 @@ async function task_1_16(db) {
         OrderID,
         CustomerID,
         ShipCountry
-    FROM orders
+    FROM Orders
     WHERE ShipPostalCode IS NOT NULL
     `);
     return result[0];
@@ -361,7 +361,7 @@ async function task_1_17(db) {
     SELECT
         CategoryName,
         AVG(UnitPrice) AS "AvgPrice"
-    FROM categories
+    FROM Categories
     INNER JOIN products ON products.CategoryID = categories.CategoryID
     GROUP BY products.CategoryID
     ORDER BY AvgPrice DESC, CategoryName
@@ -382,7 +382,7 @@ async function task_1_18(db) {
     SELECT
         DATE_FORMAT(OrderDate, '%Y-%m-%d %T') AS "OrderDate",
         COUNT(OrderDate) AS "Total Number of Orders"
-    FROM orders 
+    FROM Orders 
     WHERE YEAR(OrderDate) = 1998
     GROUP BY OrderDate
     `);
@@ -403,7 +403,7 @@ async function task_1_19(db) {
         customers.CustomerID,
         CompanyName,
         SUM(UnitPrice * Quantity) AS "TotalOrdersAmount, $"
-    FROM customers
+    FROM Customers
     INNER JOIN orders ON orders.CustomerID = customers.CustomerID
     INNER JOIN orderdetails ON orders.OrderID = orderdetails.OrderID
     GROUP BY CustomerID
@@ -427,7 +427,7 @@ async function task_1_20(db) {
         employees.EmployeeID,
         CONCAT(FirstName, ' ', LastName) AS "Employee Full Name",
         SUM(Quantity * UnitPrice) AS "Amount, $"
-    FROM orders
+    FROM Orders
     INNER JOIN employees ON orders.EmployeeID = employees.EmployeeID
     INNER JOIN orderdetails ON orderdetails.OrderID = orders.OrderID
     GROUP BY orders.EmployeeID
@@ -448,7 +448,7 @@ async function task_1_21(db) {
     SELECT
         OrderID,
         SUM(UnitPrice * Quantity) AS "Maximum Purchase Amount, $"
-    FROM orderdetails
+    FROM Orderdetails
     GROUP BY OrderID
     ORDER BY 2 DESC
     LIMIT 1

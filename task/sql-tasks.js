@@ -48,7 +48,7 @@ async function task_1_2(db) {
         OrderID as "Order Id",
         SUM(UnitPrice * Quantity) AS "Order Total Price",
         ROUND(SUM(Discount * Quantity)/SUM(UnitPrice * Quantity) * 100,3) as "Total Order Discount, %"
-    FROM Orderdetails
+    FROM OrderDetails
     GROUP by OrderID
     ORDER BY OrderID DESC
     `);
@@ -176,7 +176,7 @@ async function task_1_8(db) {
         CategoryName,
         COUNT(ProductID) AS "TotalNumberOfProducts"
     FROM Categories
-    INNER JOIN products ON products.CategoryID = categories.CategoryID
+    INNER JOIN Products ON Products.CategoryID = Categories.CategoryID
     GROUP BY CategoryName
     ORDER BY CategoryName
     `);
@@ -362,8 +362,8 @@ async function task_1_17(db) {
         CategoryName,
         AVG(UnitPrice) AS "AvgPrice"
     FROM Categories
-    INNER JOIN products ON products.CategoryID = categories.CategoryID
-    GROUP BY products.CategoryID
+    INNER JOIN Products ON Products.CategoryID = Categories.CategoryID
+    GROUP BY Products.CategoryID
     ORDER BY AvgPrice DESC, CategoryName
     `);
     return result[0];
@@ -400,12 +400,12 @@ async function task_1_18(db) {
 async function task_1_19(db) {
     let result = await db.query(`
     SELECT
-        customers.CustomerID,
+        Customers.CustomerID,
         CompanyName,
         SUM(UnitPrice * Quantity) AS "TotalOrdersAmount, $"
     FROM Customers
-    INNER JOIN orders ON orders.CustomerID = customers.CustomerID
-    INNER JOIN orderdetails ON orders.OrderID = orderdetails.OrderID
+    INNER JOIN Orders ON Orders.CustomerID = Customers.CustomerID
+    INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
     GROUP BY CustomerID
     HAVING \`TotalOrdersAmount, $\` > 10000
     ORDER BY \`TotalOrdersAmount, $\` DESC, CustomerID
@@ -424,13 +424,13 @@ async function task_1_19(db) {
 async function task_1_20(db) {
     let result = await db.query(`
     SELECT
-        employees.EmployeeID,
+        Employees.EmployeeID,
         CONCAT(FirstName, ' ', LastName) AS "Employee Full Name",
         SUM(Quantity * UnitPrice) AS "Amount, $"
     FROM Orders
-    INNER JOIN employees ON orders.EmployeeID = employees.EmployeeID
-    INNER JOIN orderdetails ON orderdetails.OrderID = orders.OrderID
-    GROUP BY orders.EmployeeID
+    INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+    INNER JOIN OrderDetails ON OrderDetails.OrderID = Orders.OrderID
+    GROUP BY Orders.EmployeeID
     ORDER BY \`Amount, $\` DESC
     LIMIT 1
     `);
@@ -448,7 +448,7 @@ async function task_1_21(db) {
     SELECT
         OrderID,
         SUM(UnitPrice * Quantity) AS "Maximum Purchase Amount, $"
-    FROM Orderdetails
+    FROM OrderDetails
     GROUP BY OrderID
     ORDER BY 2 DESC
     LIMIT 1
@@ -470,14 +470,14 @@ async function task_1_22(db) {
             Products.ProductName,
             OrderDetails.UnitPrice as PricePerItem
         FROM Customers
-        INNER JOIN orders on orders.CustomerID = customers.CustomerID        
-        INNER JOIN orderdetails on orders.OrderID = orderdetails.OrderID
-        INNER JOIN products on orderdetails.ProductID = products.ProductID
-        WHERE orderdetails.UnitPrice = (SELECT
+        INNER JOIN Orders ON Orders.CustomerID = Customers.CustomerID        
+        INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+        INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+        WHERE OrderDetails.UnitPrice = (SELECT
                                             MAX(orderdetails.UnitPrice)
                                       FROM Customers AS c
-                                      INNER JOIN orders on c.CustomerID = Orders.CustomerID 
-                                      INNER JOIN orderdetails on Orders.OrderID = orderdetails.OrderID 
+                                      INNER JOIN Orders on c.CustomerID = Orders.CustomerID 
+                                      INNER JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID 
                                       WHERE c.CustomerID = Customers.CustomerID)
         ORDER BY PricePerItem DESC, CompanyName, ProductName
     `);

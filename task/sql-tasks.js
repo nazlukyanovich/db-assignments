@@ -474,7 +474,7 @@ async function task_1_22(db) {
         INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
         INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
         WHERE OrderDetails.UnitPrice = (SELECT
-                                            MAX(orderdetails.UnitPrice)
+                                            MAX(OrderDetails.UnitPrice)
                                       FROM Customers AS c
                                       INNER JOIN Orders on c.CustomerID = Orders.CustomerID 
                                       INNER JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID 

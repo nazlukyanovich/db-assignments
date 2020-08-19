@@ -12,7 +12,7 @@ The database is quite popular for Teaching Cases. You'll find the DB scheme in t
  
 ![Northwind database schema](Northwind_A4_size_for_Print.png "Northwind database schema")
 
-## DB Assignments  [![Build Status](https://travis-ci.org/AisBrestEdu/db-assignments.svg?branch=master)](https://travis-ci.org/AisBrestEdu/db-assignments)
+## DB Assignments  [![Build Status](https://travis-ci.org/nazlukyanovich/db-assignments.svg?branch=master)](https://travis-ci.org/nazlukyanovich/db-assignments)
 
 To start DB Assignments please follow the next steps:
 *  [Fork this repo](#user-content-how-to-fork-this-repo)
@@ -35,7 +35,7 @@ To start DB Assignments please follow the next steps:
   git commit -m "Update the links"
   git push origin master
 ```
-* Open https://github.com/AisBrestEdu/db-assignments and test the build icon. Now it will run all tests and update status once you push changes to github. Keep this icon green!
+* Open https://github.com/nazlukyanovich/db-assignments and test the build icon. Now it will run all tests and update status once you push changes to github. Keep this icon green!
 
 
 ### How to setup work environment
@@ -85,7 +85,7 @@ and run the unit tests again. Find one test failed (red). Now it's time to fix i
 * Implement the function by any way and verify your solution by running tests until the failed test become passed (green).
 * Your solution work, but now time to refactor it. Try to make your code as pretty and simple as possible keeping up the test green.
 * Once you can't improve your code and tests are passed you can commit your solution.
-* Push your updates to github server and check if tests passed on [travis-ci](https://travis-ci.org/AisBrestEDU/db-assignments/builds).
+* Push your updates to github server and check if tests passed on [travis-ci](https://travis-ci.org/nazlukyanovich/db-assignments/builds).
 * If everything is OK you can try to resolve the next task.
 
 ### How to debug tasks

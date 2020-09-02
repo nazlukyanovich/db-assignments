@@ -274,9 +274,15 @@ async function task_1_12(db) {
 async function task_1_13(db) {
     let result = await db.query(`
     SELECT
-        COUNT(ProductID) AS "TotalOfCurrentProducts",
-        SUM(Discontinued) AS "TotalOfDiscontinuedProducts"
+        (SELECT COUNT(*)
+            FROM Products
+        ) AS "TotalOfCurrentProducts",
+        (SELECT COUNT(*)
+            FROM Products
+            WHERE Discontinued = 1
+        ) AS "TotalOfDiscontinuedProducts"
     FROM Products
+    LIMIT 1
     `);
     return result[0];
 }
@@ -310,18 +316,18 @@ async function task_1_14(db) {
 async function task_1_15(db) {
     let result = await db.query(`
     SELECT
-        SUM(MONTH(OrderDate) = 1) AS "January",
-        SUM(MONTH(OrderDate) = 2) AS "February",
-        SUM(MONTH(OrderDate) = 3) AS "March",
-        SUM(MONTH(OrderDate) = 4) AS "April",
-        SUM(MONTH(OrderDate) = 5) AS "May",
-        SUM(MONTH(OrderDate) = 6) AS "June",
-        SUM(MONTH(OrderDate) = 7) AS "July",
-        SUM(MONTH(OrderDate) = 8) AS "August",
-        SUM(MONTH(OrderDate) = 9) AS "September",
-        SUM(MONTH(OrderDate) = 10) AS "October",
-        SUM(MONTH(OrderDate) = 11) AS "November",
-        SUM(MONTH(OrderDate) = 12) AS "December"
+        COUNT (CASE WHEN MONTH (OrderDate) = 1 THEN 1 END) AS "January",
+        COUNT (CASE WHEN MONTH (OrderDate) = 2 THEN 1 END) AS "February",
+        COUNT (CASE WHEN MONTH (OrderDate) = 3 THEN 1 END) AS "March",
+        COUNT (CASE WHEN MONTH (OrderDate) = 4 THEN 1 END) AS "April",
+        COUNT (CASE WHEN MONTH (OrderDate) = 5 THEN 1 END) AS "May",
+        COUNT (CASE WHEN MONTH (OrderDate) = 6 THEN 1 END) AS "June",
+        COUNT (CASE WHEN MONTH (OrderDate) = 7 THEN 1 END) AS "July",
+        COUNT (CASE WHEN MONTH (OrderDate) = 8 THEN 1 END) AS "August",
+        COUNT (CASE WHEN MONTH (OrderDate) = 9 THEN 1 END) AS "September",
+        COUNT (CASE WHEN MONTH (OrderDate) = 10 THEN 1 END) AS "October",
+        COUNT (CASE WHEN MONTH (OrderDate) = 11 THEN 1 END) AS "November",
+        COUNT (CASE WHEN MONTH (OrderDate) = 12 THEN 1 END) AS "December"
     FROM Orders
     WHERE YEAR(OrderDate) = 1997
     `);
